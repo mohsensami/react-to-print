@@ -25,7 +25,7 @@ yarn add @mohsensami/react-to-print
 ### Basic Usage
 
 ```tsx
-import { usePrint } from "./lib/usePrint";
+import { usePrint } from "@mohsensami/react-to-print";
 
 const MyComponent: React.FC = () => {
   const { printRef, triggerPrint } = usePrint();
@@ -96,7 +96,7 @@ style.innerHTML = `
 Here's an example showing how to print a table:
 
 ```tsx
-import { usePrint } from "./lib/usePrint";
+import { usePrint } from "@mohsensami/react-to-print";
 
 const TableExample: React.FC = () => {
   const { printRef, triggerPrint } = usePrint();
