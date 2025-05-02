@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "index.ts"),
-      name: "react-pin-code",
+      name: "react-to-print",
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {

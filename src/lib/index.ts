@@ -1,1 +1,1 @@
-export { usePinCode } from "./usePinCode";
+export { usePrint } from "./usePrint";

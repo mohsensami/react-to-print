@@ -1,52 +1,21 @@
-import React from "react";
-import { usePinCode } from "./lib/usePinCode";
+import { usePrint } from "./lib/usePrint";
 
 const MyComponent: React.FC = () => {
-  const { getInputProps, otpValues, setOtpValue } = usePinCode({
-    inputs: [
-      { name: "input1", length: 8, defaultValue: "First" },
-      { name: "input2", length: 10, defaultValue: "Second" },
-      { name: "input3", length: 10, defaultValue: "Third" },
-    ],
-  });
-
+  const { printRef, triggerPrint } = usePrint();
   return (
     <div className="App">
-      {JSON.stringify(otpValues)}
       <div>
-        <div>
-          <input
-            type="text"
-            className="form-control text-center"
-            dir="ltr"
-            {...getInputProps(0)}
-          />
-        </div>
+        <div className="p-4">
+          <div>Input not to print</div>
+          <div ref={printRef}>
+            <h1>Printable Content</h1>
+            <p>
+              This content will be sent to the printer when you click the
+              button.
+            </p>
+          </div>
 
-        <div>
-          <span className="h3">-</span>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            className="form-control text-center"
-            dir="ltr"
-            {...getInputProps(1)}
-          />
-        </div>
-
-        <div>
-          <span className="h3">+</span>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            className="form-control text-center"
-            dir="ltr"
-            {...getInputProps(2)}
-          />
+          <button onClick={triggerPrint}>Print</button>
         </div>
       </div>
     </div>

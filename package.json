@@ -1,14 +1,14 @@
 {
-  "name": "@mohsensami/react-pin-code",
-  "version": "1.2.1",
+  "name": "@mohsensami/react-to-print",
+  "version": "1.0.0",
   "private": false,
   "description": "",
-  "main": "./dist/pin-code-react.umd.js",
-  "module": "./dist/pin-code-react.es.js",
+  "main": "./dist/react-to-print.umd.js",
+  "module": "./dist/react-to-print.es.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohsensami/react-pin-code"
+    "url": "git+https://github.com/mohsensami/react-to-print"
   },
   "exports": {
     ".": {
@@ -26,7 +26,7 @@
   },
   "keywords": [
     "react",
-    "pin-code"
+    "react-to-print"
   ],
   "author": "Mohsen Sami",
   "license": "MIT",
