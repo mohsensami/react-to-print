@@ -1,1 +1,1 @@
-export { usePinCode } from "./src/lib";
+export { usePrint } from "./src/lib";
