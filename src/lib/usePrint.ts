@@ -5,31 +5,40 @@ export const usePrint = () => {
 
   const triggerPrint = () => {
     if (printRef.current) {
+      // Create a new window for printing
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) return;
+
+      // Get the content to print
       const printContent = printRef.current.innerHTML;
-      const originalContent = document.body.innerHTML;
 
-      // Create a temporary div to hold the print content
-      const printDiv = document.createElement("div");
-      printDiv.innerHTML = printContent;
+      // Write the content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              @media print {
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h1 { color: #333; }
+              }
+            </style>
+          </head>
+          <body>
+            ${printContent}
+          </body>
+        </html>
+      `);
 
-      // Replace the body content with our print content
-      document.body.innerHTML = printDiv.innerHTML;
+      // Close the document to ensure all content is loaded
+      printWindow.document.close();
 
-      // Add print-specific styles
-      const style = document.createElement("style");
-      style.innerHTML = `
-        @media print {
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          h1 { color: #333; }
-        }
-      `;
-      document.head.appendChild(style);
-
-      // Trigger print
-      window.print();
-
-      // Restore original content
-      document.body.innerHTML = originalContent;
+      // Wait for the content to load before printing
+      printWindow.onload = () => {
+        printWindow.print();
+        // Close the window after printing
+        printWindow.close();
+      };
     }
   };
 
