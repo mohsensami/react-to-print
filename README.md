@@ -1,6 +1,6 @@
-# React Print Hook
+# React-to-Print
 
-A simple and reliable React hook for printing specific content from your React application.
+A simple and customizable React hook for printing content with style control.
 
 ## Features
 
@@ -15,9 +15,9 @@ A simple and reliable React hook for printing specific content from your React a
 ## Installation
 
 ```bash
-npm install @mohsensami/react-to-print
+npm install react-to-print
 # or
-yarn add @mohsensami/react-to-print
+yarn add react-to-print
 ```
 
 ## Usage
@@ -25,120 +25,141 @@ yarn add @mohsensami/react-to-print
 ### Basic Usage
 
 ```tsx
-import { usePrint } from "@mohsensami/react-to-print";
+import { usePrint } from "./lib/usePrint";
 
 const MyComponent: React.FC = () => {
   const { printRef, triggerPrint } = usePrint();
 
   return (
-    <div className="App">
-      <div>
-        <div className="p-4">
-          <div>Content that won't be printed</div>
-          <div ref={printRef}>
-            <h1>Printable Content</h1>
-            <p>
-              This content will be sent to the printer when you click the
-              button.
-            </p>
-          </div>
-          <button onClick={triggerPrint}>Print</button>
-        </div>
+    <div>
+      <div ref={printRef}>
+        <h1>Printable Content</h1>
+        <p>This content will be printed</p>
       </div>
+      <button onClick={triggerPrint}>Print</button>
     </div>
   );
 };
 ```
 
-### Hook API
+### Advanced Usage with Custom Styles
 
-The `usePrint` hook returns an object with the following properties:
-
-| Property       | Type                              | Description                                          |
-| -------------- | --------------------------------- | ---------------------------------------------------- |
-| `printRef`     | `React.RefObject<HTMLDivElement>` | Reference to the element containing content to print |
-| `triggerPrint` | `() => void`                      | Function to trigger the print dialog                 |
-
-### How It Works
-
-1. **Reference Setup**: The `printRef` is attached to the element containing the content you want to print
-2. **Print Trigger**: When `triggerPrint` is called:
-   - Captures the content of the referenced element
-   - Temporarily replaces the page content with the print content
-   - Applies print-specific styles
-   - Opens the browser's print dialog
-   - Restores the original page content after printing
-
-### Print-Specific Styling
-
-The hook automatically applies some basic print styles, but you can customize them by modifying the `style` object in the `usePrint` hook:
+You can customize the appearance of your printed content using `beforePrint` and `afterPrint` styles:
 
 ```tsx
-const style = document.createElement("style");
-style.innerHTML = `
-  @media print {
-    body { 
-      font-family: Arial, sans-serif; 
-      margin: 20px;
-      color: #000;
-    }
-    h1 { 
-      color: #333;
-      margin-bottom: 20px;
-    }
-    /* Add your custom print styles here */
-  }
-`;
-```
+import { usePrint } from "./lib/usePrint";
 
-## Example with Table
+const MyComponent: React.FC = () => {
+  const printStyles = {
+    beforePrint: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+      fontSize: "14px",
+      lineHeight: "1.5",
+    },
+    afterPrint: {
+      color: "#333333",
+      fontFamily: "Arial, sans-serif",
+      margin: "0",
+      padding: "0",
+    },
+  };
 
-Here's an example showing how to print a table:
-
-```tsx
-import { usePrint } from "@mohsensami/react-to-print";
-
-const TableExample: React.FC = () => {
-  const { printRef, triggerPrint } = usePrint();
+  const { printRef, triggerPrint } = usePrint(printStyles);
 
   return (
     <div>
       <div ref={printRef}>
-        <h2>Employee Data</h2>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Department</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>John Doe</td>
-              <td>Developer</td>
-              <td>Engineering</td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>Designer</td>
-              <td>Creative</td>
-            </tr>
-          </tbody>
-        </table>
+        <h1>Printable Content</h1>
+        <p>This content will be printed with custom styles</p>
       </div>
-      <button onClick={triggerPrint}>Print Table</button>
+      <button onClick={triggerPrint}>Print</button>
     </div>
   );
 };
 ```
 
+## API Reference
+
+### usePrint Hook
+
+The `usePrint` hook accepts an optional `styles` parameter and returns an object with the following properties:
+
+#### Parameters
+
+```typescript
+interface PrintStyles {
+  beforePrint?: React.CSSProperties; // Styles applied before printing
+  afterPrint?: React.CSSProperties; // Styles applied during printing
+}
+```
+
+#### Returns
+
+```typescript
+{
+  printRef: React.RefObject<HTMLDivElement>;  // Ref to attach to the printable content
+  triggerPrint: () => void;                  // Function to trigger the print dialog
+}
+```
+
+### Style Properties
+
+You can use any valid CSS properties in your style objects. Here are some common examples:
+
+```typescript
+const printStyles = {
+  beforePrint: {
+    backgroundColor: "#ffffff", // Background color
+    color: "#000000", // Text color
+    fontSize: "14px", // Font size
+    lineHeight: "1.5", // Line height
+    padding: "20px", // Padding
+    margin: "0", // Margin
+  },
+  afterPrint: {
+    color: "#333333", // Text color for printing
+    fontFamily: "Arial, sans-serif", // Font family
+    margin: "0", // Margin for printing
+    padding: "0", // Padding for printing
+  },
+};
+```
+
+## How It Works
+
+1. The `usePrint` hook creates a reference (`printRef`) that you attach to the content you want to print.
+2. When `triggerPrint` is called, it:
+   - Opens a new window
+   - Copies your content into it
+   - Applies the specified styles
+   - Triggers the browser's print dialog
+   - Closes the window after printing
+
 ## Best Practices
 
-1. **Keep Print Content Simple**: Avoid complex layouts and animations in print content
-2. **Use Print-Specific Styles**: Utilize `@media print` to optimize the printed output
-3. **Test Across Browsers**: Different browsers may handle printing slightly differently
-4. **Consider Page Breaks**: Use `page-break-before` and `page-break-after` CSS properties when needed
+1. **Content Organization**
+
+   - Only include the content you want to print within the `printRef` div
+   - Keep non-printable content outside the `printRef`
+
+2. **Styling**
+
+   - Use `beforePrint` styles for the print preview appearance
+   - Use `afterPrint` styles for the final printed output
+   - Test your print styles in different browsers
+
+3. **Performance**
+   - Keep the printable content as simple as possible
+   - Avoid complex layouts that might not print well
+
+## Browser Support
+
+This library works in all modern browsers that support:
+
+- React 16.8+
+- ES6+
+- CSS @media print
 
 ## License
 
