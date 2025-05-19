@@ -1,7 +1,23 @@
 import { usePrint } from "./lib/usePrint";
 
 const MyComponent: React.FC = () => {
-  const { printRef, triggerPrint } = usePrint();
+  const printStyles = {
+    beforePrint: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+      fontSize: "14px",
+      lineHeight: "1.5",
+    },
+    afterPrint: {
+      color: "#ff8000",
+      fontFamily: "Arial, sans-serif",
+      margin: "0",
+      padding: "0",
+    },
+  };
+
+  const { printRef, triggerPrint } = usePrint(printStyles);
+
   return (
     <div className="App">
       <div>
