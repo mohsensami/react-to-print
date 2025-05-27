@@ -130,9 +130,13 @@ const printStyles = {
 
 1. The `usePrint` hook creates a reference (`printRef`) that you attach to the content you want to print.
 2. When `triggerPrint` is called, it:
-   - Opens a new window
+   - Opens a new window (Note: This may be blocked by popup blockers)
    - Copies your content into it
    - Applies the specified styles
+   - Sets default styles including:
+     - Font family: Arial, sans-serif
+     - Body margin: 20px
+     - Page margin: 20mm when printing
    - Triggers the browser's print dialog
    - Closes the window after printing
 
@@ -142,16 +146,22 @@ const printStyles = {
 
    - Only include the content you want to print within the `printRef` div
    - Keep non-printable content outside the `printRef`
+   - Be aware that popup blockers might prevent the print window from opening
 
 2. **Styling**
 
    - Use `beforePrint` styles for the print preview appearance
    - Use `afterPrint` styles for the final printed output
    - Test your print styles in different browsers
+   - Note that the hook automatically sets some default styles:
+     - Arial font family
+     - 20px body margin
+     - 20mm page margins when printing
 
 3. **Performance**
    - Keep the printable content as simple as possible
    - Avoid complex layouts that might not print well
+   - Consider the impact of popup blockers on your users' experience
 
 ## Browser Support
 
@@ -160,6 +170,7 @@ This library works in all modern browsers that support:
 - React 16.8+
 - ES6+
 - CSS @media print
+- Window.open() API (required for printing)
 
 ## License
 
