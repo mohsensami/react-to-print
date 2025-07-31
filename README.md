@@ -1,177 +1,324 @@
-# React-to-Print
+# @mohsensami/print
 
-A simple and customizable React hook for printing content with style control.
+## 📄 React Print Component
 
-## Features
+A simple and powerful React component for printing custom content with full customization capabilities.
 
-| Feature              | Description                                        |
-| -------------------- | -------------------------------------------------- |
-| 🖨️ Easy to Use       | Simple hook implementation with minimal setup      |
-| 🎯 Targeted Printing | Print only specific parts of your application      |
-| 🎨 Customizable      | Add custom styles for print layout                 |
-| 🔄 Reliable          | Uses native browser print functionality            |
-| 🚫 No Popups         | No reliance on popup windows that might be blocked |
+## 🚀 Features
 
-## Installation
+- ✅ **Simple Integration**: Easy to use React component
+- ✅ **Customizable Styling**: Full control over print styles
+- ✅ **Flexible Content**: Print any React content
+- ✅ **RTL Support**: Built-in support for Persian/Arabic content
+- ✅ **TypeScript**: Full TypeScript support
+- ✅ **Lightweight**: Minimal bundle size
+- ✅ **Customizable Button**: Hide button or customize its appearance
+
+---
+
+## 📦 Installation
 
 ```bash
-npm install react-to-print
-# or
-yarn add react-to-print
+npm install @mohsensami/print
 ```
 
-## Usage
+```bash
+yarn add @mohsensami/print
+```
 
-### Basic Usage
+```bash
+pnpm add @mohsensami/print
+```
+
+---
+
+## 🎯 Quick Start
 
 ```tsx
-import { usePrint } from "./lib/usePrint";
+import React from "react";
+import Print from "@mohsensami/print";
 
-const MyComponent: React.FC = () => {
-  const { printRef, triggerPrint } = usePrint();
-
+function App() {
   return (
-    <div>
-      <div ref={printRef}>
-        <h1>Printable Content</h1>
+    <Print triggerLabel="Print Report">
+      <div>
+        <h1>Monthly Report</h1>
         <p>This content will be printed</p>
       </div>
-      <button onClick={triggerPrint}>Print</button>
-    </div>
+    </Print>
   );
-};
+}
 ```
 
-### Advanced Usage with Custom Styles
+---
 
-You can customize the appearance of your printed content using `beforePrint` and `afterPrint` styles:
+## 📚 API Documentation
+
+### Props
+
+| Prop            | Type                  | Default            | Description               |
+| --------------- | --------------------- | ------------------ | ------------------------- |
+| `children`      | `ReactNode`           | -                  | Content to be printed     |
+| `triggerLabel`  | `string`              | `"Print"`          | Print button text         |
+| `className`     | `string`              | `""`               | CSS class for component   |
+| `documentTitle` | `string`              | `"Print Document"` | Document title for print  |
+| `pageStyle`     | `string`              | `""`               | Custom CSS for print page |
+| `buttonStyle`   | `React.CSSProperties` | `{}`               | Print button style        |
+| `hideButton`    | `boolean`             | `false`            | Hide print button         |
+
+---
+
+## 💡 Usage Examples
+
+### Example 1: Simple Print
 
 ```tsx
-import { usePrint } from "./lib/usePrint";
+import Print from "@mohsensami/print";
 
-const MyComponent: React.FC = () => {
-  const printStyles = {
-    beforePrint: {
-      backgroundColor: "#ffffff",
-      color: "#000000",
-      fontSize: "14px",
-      lineHeight: "1.5",
-    },
-    afterPrint: {
-      color: "#333333",
-      fontFamily: "Arial, sans-serif",
-      margin: "0",
-      padding: "0",
-    },
-  };
-
-  const { printRef, triggerPrint } = usePrint(printStyles);
-
-  return (
-    <div>
-      <div ref={printRef}>
-        <h1>Printable Content</h1>
-        <p>This content will be printed with custom styles</p>
-      </div>
-      <button onClick={triggerPrint}>Print</button>
-    </div>
-  );
-};
+<Print>
+  <div>
+    <h1>Document Title</h1>
+    <p>Document content</p>
+  </div>
+</Print>;
 ```
 
-## API Reference
+### Example 2: Print with Custom Styling
 
-### usePrint Hook
+```tsx
+<Print
+  triggerLabel="Print Report"
+  documentTitle="Financial Report"
+  pageStyle={`
+    body { 
+      font-family: 'Arial', sans-serif; 
+      direction: ltr; 
+      padding: 2rem; 
+      line-height: 1.6;
+    }
+    h1 { 
+      color: #2c3e50; 
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f8f9fa;
+    }
+  `}
+>
+  <div>
+    <h1>Monthly Financial Report</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Amount</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Income</td>
+          <td>$1,000,000</td>
+          <td>2024/01/15</td>
+        </tr>
+        <tr>
+          <td>Expenses</td>
+          <td>$500,000</td>
+          <td>2024/01/20</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Print>
+```
 
-The `usePrint` hook accepts an optional `styles` parameter and returns an object with the following properties:
+### Example 3: Print without Button
 
-#### Parameters
+```tsx
+<Print hideButton={true}>
+  <div>Hidden content for printing</div>
+</Print>;
 
-```typescript
-interface PrintStyles {
-  beforePrint?: React.CSSProperties; // Styles applied before printing
-  afterPrint?: React.CSSProperties; // Styles applied during printing
+// Using ref for programmatic printing
+const printRef = useRef();
+
+// Print via code
+printRef.current?.printContent();
+```
+
+### Example 4: Custom Button
+
+```tsx
+<Print
+  triggerLabel="🖨️ Print Invoice"
+  buttonStyle={{
+    backgroundColor: "#27ae60",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "14px",
+  }}
+>
+  <div>
+    <h1>Sales Invoice</h1>
+    {/* Invoice content */}
+  </div>
+</Print>
+```
+
+---
+
+## 🎨 Styling Tips
+
+### Recommended Print Styles
+
+```css
+/* Base styles for printing */
+body {
+  font-family: "Arial", "Helvetica", sans-serif;
+  direction: ltr;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Lists */
+ul,
+ol {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Page breaks */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 15px;
+  }
 }
 ```
 
-#### Returns
+---
 
-```typescript
-{
-  printRef: React.RefObject<HTMLDivElement>;  // Ref to attach to the printable content
-  triggerPrint: () => void;                  // Function to trigger the print dialog
-}
+## 🔧 Development
+
+### Install Dependencies
+
+```bash
+npm install
 ```
 
-### Style Properties
+### Build Project
 
-You can use any valid CSS properties in your style objects. Here are some common examples:
-
-```typescript
-const printStyles = {
-  beforePrint: {
-    backgroundColor: "#ffffff", // Background color
-    color: "#000000", // Text color
-    fontSize: "14px", // Font size
-    lineHeight: "1.5", // Line height
-    padding: "20px", // Padding
-    margin: "0", // Margin
-  },
-  afterPrint: {
-    color: "#333333", // Text color for printing
-    fontFamily: "Arial, sans-serif", // Font family
-    margin: "0", // Margin for printing
-    padding: "0", // Padding for printing
-  },
-};
+```bash
+npm run build
 ```
 
-## How It Works
+### Run Example
 
-1. The `usePrint` hook creates a reference (`printRef`) that you attach to the content you want to print.
-2. When `triggerPrint` is called, it:
-   - Opens a new window (Note: This may be blocked by popup blockers)
-   - Copies your content into it
-   - Applies the specified styles
-   - Sets default styles including:
-     - Font family: Arial, sans-serif
-     - Body margin: 20px
-     - Page margin: 20mm when printing
-   - Triggers the browser's print dialog
-   - Closes the window after printing
+```bash
+cd example
+npm install
+npm run dev
+```
 
-## Best Practices
+---
 
-1. **Content Organization**
+## 📋 Requirements
 
-   - Only include the content you want to print within the `printRef` div
-   - Keep non-printable content outside the `printRef`
-   - Be aware that popup blockers might prevent the print window from opening
+- React 17.0.0 or higher
+- React DOM 17.0.0 or higher
 
-2. **Styling**
+---
 
-   - Use `beforePrint` styles for the print preview appearance
-   - Use `afterPrint` styles for the final printed output
-   - Test your print styles in different browsers
-   - Note that the hook automatically sets some default styles:
-     - Arial font family
-     - 20px body margin
-     - 20mm page margins when printing
+## 🤝 Contributing
 
-3. **Performance**
-   - Keep the printable content as simple as possible
-   - Avoid complex layouts that might not print well
-   - Consider the impact of popup blockers on your users' experience
+To contribute to this project:
 
-## Browser Support
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-This library works in all modern browsers that support:
+---
 
-- React 16.8+
-- ES6+
-- CSS @media print
-- Window.open() API (required for printing)
+## 📄 License
 
-## License
+This project is licensed under the MIT License.
 
-MIT
+---
+
+## 🙏 Acknowledgments
+
+- React Community
+- TypeScript Team
+- Rollup Team
+
+---
+
+## 📞 Support
+
+For questions and issues:
+
+- GitHub Issues: [Create Issue](https://github.com/your-repo/issues)
+- Email: your-email@example.com
+
+---
+
+<div align="center">
+
+**⭐ If this project was helpful, please give it a star! ⭐**
+
+</div>
